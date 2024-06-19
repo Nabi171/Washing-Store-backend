@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IService } from './service.interface';
+import { IService } from './services.interface';
 
 const serviceSchema = new Schema<IService>(
   {
