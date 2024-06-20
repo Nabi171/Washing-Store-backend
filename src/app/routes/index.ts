@@ -1,3 +1,4 @@
+import { ServiceRoutes } from './../modules/services/services.route';
 import { Router } from "express";
 import { UserRoutes } from "../modules/User/user.route";
 
@@ -9,8 +10,8 @@ const moduleRoutes = [
     route: UserRoutes,
   },
   {
-    path: '/auth',
-    route: UserRoutes,
+    path: '/services',
+    route: ServiceRoutes,
   },
 
 
