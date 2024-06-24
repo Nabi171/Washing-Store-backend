@@ -1,10 +1,8 @@
-import { Types } from 'mongoose';
+import { Types } from "mongoose";
 
-export interface IBooking {
-
+export interface ISlot {
   service: Types.ObjectId;
   date: string;
   startTime: string;
   endTime: string;
-  
 }

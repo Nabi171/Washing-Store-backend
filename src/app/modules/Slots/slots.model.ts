@@ -1,13 +1,12 @@
-import { Schema, Types, model } from 'mongoose';
-import { IBooking } from './slots.interface';
-// import { IService } from './services.interface';
+import { Schema, model } from "mongoose";
+import { ISlot } from "./slots.interface";
 
-const BookingSchema:any = new Schema<IBooking>(
+const slotSchema = new Schema<ISlot>(
   {
     service: {
-      type: 'ObjectID',
+      type: Schema.Types.ObjectId,
+      ref: "Service",
       required: true,
-      ref:"Service"
     },
     date: {
       type: String,
@@ -21,11 +20,10 @@ const BookingSchema:any = new Schema<IBooking>(
       type: String,
       required: true,
     },
-
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-export const BookingSchema = model<IBooking>('Booking', BookingSchema);
+export const Slot = model<ISlot>("Slot", slotSchema);
