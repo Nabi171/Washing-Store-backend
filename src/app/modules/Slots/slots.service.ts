@@ -11,6 +11,19 @@ const getAllSlotsFromDB = async () => {
   return result;
 };
 
+const getAvailableSlotsFromDB = async (slots: ISlot[]): Promise<ISlot[]> => {
+  const existingSlots = await Slot.find({
+    startTime: { $in: slots.map((slot) => slot.startTime) },
+  });
+  const availableSlots = slots.filter(
+    (slot) =>
+      !existingSlots.find(
+        (existingSlot) => existingSlot.startTime === slot.startTime
+      )
+  );
+  return availableSlots;
+};
+
 const getSingleSlotFromDB = async (id: string) => {
   const result = await Slot.findById(id).populate("service");
   return result;
@@ -31,6 +44,7 @@ const deleteSlotFromDB = async (id: string) => {
 export const SlotServices = {
   createSlotIntoDB,
   getAllSlotsFromDB,
+  getAvailableSlotsFromDB,
   getSingleSlotFromDB,
   updateSlotIntoDB,
   deleteSlotFromDB,
