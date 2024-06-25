@@ -1,13 +1,51 @@
-import { ISlot } from "./slots.interface";
 import { Slot } from "./slots.model";
+import { ISlot } from "./slots.interface";
 
-const createSlotIntoDB = async (payload: ISlot) => {
-  const result = await Slot.create(payload);
+const createSlotIntoDB = async (slotData: ISlot): Promise<ISlot[]> => {
+  const { service, date, startTime, endTime } = slotData;
+
+  const startHour = parseInt(startTime.split(":")[0], 10);
+  const endHour = parseInt(endTime.split(":")[0], 10);
+
+  const slotsToCreate = [];
+
+  for (let hour = startHour; hour < endHour; hour++) {
+    const slot = {
+      service,
+      date,
+      startTime: `${String(hour).padStart(2, "0")}:00`,
+      endTime: `${String(hour + 1).padStart(2, "0")}:00`,
+      isBooked: "available",
+    };
+    slotsToCreate.push(slot);
+  }
+
+  const result = await Slot.insertMany(slotsToCreate);
   return result;
 };
 
-const getAllSlotsFromDB = async () => {
-  const result = await Slot.find().populate("service");
+const getAllSlotsFromDB = async (): Promise<ISlot[]> => {
+  const result = await Slot.find();
+  return result;
+};
+
+const getSingleSlotFromDB = async (slotId: string): Promise<ISlot | null> => {
+  const result = await Slot.findById(slotId).exec();
+  return result;
+};
+
+const updateSlotIntoDB = async (
+  slotId: string,
+  slotData: Partial<ISlot>
+): Promise<ISlot | null> => {
+  const result = await Slot.findByIdAndUpdate(slotId, slotData, {
+    new: true,
+  }).exec();
+  return result;
+};
+
+const deleteSlotFromDB = async (slotId: string): Promise<ISlot | null> => {
+  const result = await Slot.findByIdAndDelete(slotId).exec();
   return result;
 };
 
@@ -24,28 +62,11 @@ const getAvailableSlotsFromDB = async (slots: ISlot[]): Promise<ISlot[]> => {
   return availableSlots;
 };
 
-const getSingleSlotFromDB = async (id: string) => {
-  const result = await Slot.findById(id).populate("service");
-  return result;
-};
-
-const updateSlotIntoDB = async (id: string, payload: Partial<ISlot>) => {
-  const result = await Slot.findOneAndUpdate({ _id: id }, payload, {
-    new: true,
-  }).populate("service");
-  return result;
-};
-
-const deleteSlotFromDB = async (id: string) => {
-  const result = await Slot.findByIdAndDelete(id);
-  return result;
-};
-
 export const SlotServices = {
   createSlotIntoDB,
   getAllSlotsFromDB,
-  getAvailableSlotsFromDB,
   getSingleSlotFromDB,
   updateSlotIntoDB,
   deleteSlotFromDB,
+  getAvailableSlotsFromDB,
 };
