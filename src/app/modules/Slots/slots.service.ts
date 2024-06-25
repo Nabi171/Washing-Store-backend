@@ -23,50 +23,15 @@ const createSlotIntoDB = async (slotData: ISlot): Promise<ISlot[]> => {
   const result = await Slot.insertMany(slotsToCreate);
   return result;
 };
-
-const getAllSlotsFromDB = async (): Promise<ISlot[]> => {
-  const result = await Slot.find();
+const getAvailableSlotsFromDB = async (
+  date?: string,
+  serviceId?: string
+): Promise<ISlot[]> => {
+  const result = await Slot.find().populate("");
   return result;
-};
-
-const getSingleSlotFromDB = async (slotId: string): Promise<ISlot | null> => {
-  const result = await Slot.findById(slotId).exec();
-  return result;
-};
-
-const updateSlotIntoDB = async (
-  slotId: string,
-  slotData: Partial<ISlot>
-): Promise<ISlot | null> => {
-  const result = await Slot.findByIdAndUpdate(slotId, slotData, {
-    new: true,
-  }).exec();
-  return result;
-};
-
-const deleteSlotFromDB = async (slotId: string): Promise<ISlot | null> => {
-  const result = await Slot.findByIdAndDelete(slotId).exec();
-  return result;
-};
-
-const getAvailableSlotsFromDB = async (slots: ISlot[]): Promise<ISlot[]> => {
-  const existingSlots = await Slot.find({
-    startTime: { $in: slots.map((slot) => slot.startTime) },
-  });
-  const availableSlots = slots.filter(
-    (slot) =>
-      !existingSlots.find(
-        (existingSlot) => existingSlot.startTime === slot.startTime
-      )
-  );
-  return availableSlots;
 };
 
 export const SlotServices = {
   createSlotIntoDB,
-  getAllSlotsFromDB,
-  getSingleSlotFromDB,
-  updateSlotIntoDB,
-  deleteSlotFromDB,
   getAvailableSlotsFromDB,
 };
