@@ -1,3 +1,4 @@
+import { AuthRoutes } from "./../modules/Auth/auth.route";
 import { SlotsRoutes } from "./../modules/Slots/slots.route";
 import { ServiceRoutes } from "./../modules/services/services.route";
 import { Router } from "express";
@@ -22,6 +23,10 @@ const moduleRoutes = [
   {
     path: "/bookings",
     route: BookingRoutes,
+  },
+  {
+    path: "/auth",
+    route: AuthRoutes,
   },
 ];
 

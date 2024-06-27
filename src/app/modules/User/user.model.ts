@@ -35,8 +35,8 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-userSchema.statics.isUserExistsByCustomId = async function (id: string) {
-  return await User.findOne({ id }).select("+password");
+userSchema.statics.isUserExistsByCustomEmail = async function () {
+  return await User.find();
 };
 
 userSchema.statics.isPasswordMatched = async function (

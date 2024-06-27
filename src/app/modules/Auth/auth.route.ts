@@ -12,10 +12,10 @@ router.post(
 );
 
 router.post(
-  "/change-password",
+  "/change-password"
   // auth(USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.student),
   // validateRequest(AuthValidation.changePasswordValidationSchema),
-  AuthControllers.changePassword
+  //   AuthControllers.changePassword
 );
 
 router.post(
